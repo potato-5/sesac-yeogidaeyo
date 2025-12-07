@@ -5,7 +5,9 @@ import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.hyun.sesac.shared.navigation.BottomNavigationRoute
+import com.hyun.sesac.shared.navigation.HomeNavigationRoute
+import com.hyun.sesac.shared.navigation.MyPageNavigationRoute
+import com.hyun.sesac.shared.navigation.RegisterNavigationRoute
 import com.hyun.sesac.shared.navigation.YeogidaeyoNavigation
 
 data class BottomAppBarItem(
@@ -19,17 +21,17 @@ data class BottomAppBarItem(
             BottomAppBarItem(
                 tabName = "Home",
                 icon = Icons.Filled.Home,
-                destination = BottomNavigationRoute.HomeTab
+                destination = HomeNavigationRoute.HomeTab
             ),
             BottomAppBarItem(
                 tabName = "Register",
                 icon = Icons.Filled.AddCircleOutline,
-                destination = BottomNavigationRoute.HomeTab
+                destination = RegisterNavigationRoute.RegisterTab
             ),
             BottomAppBarItem(
                 tabName = "MyPage",
                 icon = Icons.Filled.PersonOutline,
-                destination = BottomNavigationRoute.HomeTab
+                destination = MyPageNavigationRoute.MyPageTab
             )
         )
     }
