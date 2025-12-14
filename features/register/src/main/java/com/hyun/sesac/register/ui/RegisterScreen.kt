@@ -2,19 +2,7 @@ package com.hyun.sesac.register.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,48 +11,87 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import com.hyun.sesac.register.R
 
-//@Preview(showBackground = true)
+// 1. 최상위 진입점 (Stateful): 상태 관리 및 BottomSheet 제어 담당
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    // ViewModel 대신 UI 내부에서 상태 관리 (화면 회전 대응)
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
+    // 공통 닫기 로직 (애니메이션 후 상태 변경)
+    val closeSheet: () -> Unit = {
+        scope.launch { sheetState.hide() }.invokeOnCompletion {
+            if (!sheetState.isVisible) showBottomSheet = false
+        }
+    }
+
+    // 메인 UI 컨텐츠 (상태 없음, 이벤트만 전달)
+    RegisterScreenContent(
+        modifier = modifier,
+        onMoreClicked = { showBottomSheet = true }
+    )
+
+    // Bottom Sheet 조건부 렌더링
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showBottomSheet = false },
+            sheetState = sheetState,
+            containerColor = Color.White // 디자인에 맞춰 배경색 지정
+        ) {
+            // 시트 내부 컨텐츠
+            RegisterBottomSheetContent(
+                onExitClick = {
+                    // TODO: 출차 로직 추가
+                    closeSheet()
+                },
+                onEditClick = {
+                    // TODO: 수정 로직 추가
+                    closeSheet()
+                },
+                onDeleteClick = {
+                    // TODO: 삭제 로직 추가
+                    closeSheet()
+                }
+            )
+        }
+    }
+}
+
+// 2. 메인 화면 UI (Stateless): 보여주기만 담당
+@Composable
+fun RegisterScreenContent(
     modifier: Modifier = Modifier,
     locationName: String = "서울시청 본청사 주차장",
     spotName: String = "B1A 23",
     entryTime: String = "10:30",
-    cost: String = "30,000 원"
-    ) {
+    cost: String = "30,000 원",
+    onMoreClicked: () -> Unit // 이벤트 호이스팅
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
             .statusBarsPadding()
-        // .verticalScroll(rememberScrollState()) // 필요 시 스크롤 추가
+            .verticalScroll(rememberScrollState()) // 스크롤 가능하도록 변경
     ) {
         Text(
             text = "내 주차 등록",
@@ -79,10 +106,10 @@ fun RegisterScreen(
         )
 
         Card(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(), // 높이를 내용물에 맞게 (너무 작아지지 않게)
-            shape = RoundedCornerShape(28.dp), // 둥근 모서리 크게
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(28.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
@@ -90,19 +117,19 @@ fun RegisterScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(320.dp) // 이미지 높이를 충분히 줌 (스크린샷 비율 반영)
+                        .height(320.dp)
                 ) {
-                    // 1-1. 배경 이미지 (실제 주차장 사진 or 회색 placeholder)
+                    // 더미 이미지
                     Image(
-                        painter = painterResource(id = R.drawable.parking), // 더미 이미지
+                        painter = painterResource(id = R.drawable.parking),
                         contentDescription = "주차 사진",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
 
-                    // 1-2. 우측 상단 더보기 아이콘 (동그라미 배경)
+                    // [수정됨] 더보기 버튼 동작 연결
                     IconButton(
-                        onClick = { /* 메뉴 */ },
+                        onClick = onMoreClicked, // 상위로 이벤트 전달
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(16.dp)
@@ -116,8 +143,9 @@ fun RegisterScreen(
                         )
                     }
 
+                    // 카메라 버튼 (기능 없음)
                     IconButton(
-                        onClick = { /* 메뉴 */ },
+                        onClick = { /* 사진 찍기 */ },
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(16.dp)
@@ -126,130 +154,82 @@ fun RegisterScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.CameraAlt,
-                            contentDescription = "더보기",
+                            contentDescription = "카메라",
                             tint = Color.White
                         )
                     }
 
-                    // 1-3. 반투명 검은 박스
+                    // 하단 정보 오버레이
                     Box(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter) // 이미지 하단에 배치
+                            .align(Alignment.BottomCenter)
                             .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 20.dp) // 이미지 끝에서 좀 띄움
-                            .height(80.dp) // 박스 높이 설정
+                            .padding(20.dp)
+                            .height(80.dp)
                             .background(
-                                color = Color.Black.copy(alpha = 0.6f), // 60% 투명도 검은색
+                                color = Color.Black.copy(alpha = 0.6f),
                                 shape = RoundedCornerShape(16.dp)
                             )
-                            .padding(horizontal = 20.dp), // 박스 내부 글자 패딩
-                        contentAlignment = Alignment.CenterStart // 글자들 수직 중앙 정렬
+                            .padding(horizontal = 20.dp),
+                        contentAlignment = Alignment.CenterStart
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                // 작은 위치 텍스트
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    // 파란색 위치 아이콘 점 (Canvas나 Icon으로 대체 가능)
-                                    Box(
-                                        modifier = Modifier
-                                            .size(6.dp)
-                                            .background(Color(0xFF2196F3), CircleShape)
-                                    )
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = locationName,
-                                        color = Color.White.copy(alpha = 0.9f),
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(4.dp))
-                                // 큰 주차면 텍스트 (B1A 23)
+                        Column {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .background(Color(0xFF2196F3), CircleShape)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
                                 Text(
-                                    text = spotName,
-                                    color = Color.White,
-                                    fontSize = 28.sp,
-                                    fontWeight = FontWeight.Bold
+                                    text = locationName,
+                                    color = Color.White.copy(alpha = 0.9f),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = spotName,
+                                color = Color.White,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                 }
 
-                // ==========================================================
-                // 2. 하단 정보 영역 (흰색 배경)
-                // ==========================================================
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp) // [요청하신 부분] 내부 패딩을 넓게 줘서 영역 확보
-                ) {
-                    // 2-1. 입차 시간 & 요금 Row
+                // 카드 하단 정보 영역
+                Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        // 왼쪽: 입차 시간
                         Column {
-                            Text(
-                                text = "입차 시간",
-                                color = Color.Gray,
-                                fontSize = 14.sp
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = entryTime,
-                                color = Color.Black,
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+                            Text("입차 시간", color = Color.Gray, fontSize = 14.sp)
+                            Spacer(Modifier.height(6.dp))
+                            Text(entryTime, color = Color.Black, fontSize = 26.sp, fontWeight = FontWeight.Bold)
                         }
-
-                        // 오른쪽: 요금 (우측 정렬)
                         Column(horizontalAlignment = Alignment.End) {
-                            Text(
-                                text = "예상 주차 요금",
-                                color = Color.Gray,
-                                fontSize = 14.sp
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Row(verticalAlignment = Alignment.Bottom) {
-                                Text(
-                                    text = cost,
-                                    color = Color(0xFFFF5252), // 빨간색
-                                    fontSize = 26.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                            Text("예상 주차 요금", color = Color.Gray, fontSize = 14.sp)
+                            Spacer(Modifier.height(6.dp))
+                            Text(cost, color = Color(0xFFFF5252), fontSize = 26.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // 2-2. 하단 경고 문구 (연한 회색/빨강 배경 캡슐)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(
-                                color = Color(0xFFF5F5F5), // 아주 연한 회색 (스크린샷 유사)
-                                shape = RoundedCornerShape(12.dp)
-                            )
+                            .background(Color(0xFFF5F5F5), RoundedCornerShape(12.dp))
                             .padding(vertical = 14.dp, horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Warning, // 경고 아이콘
-                            contentDescription = null,
-                            tint = Color(0xFFFF5252),
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(Icons.Default.Warning, null, tint = Color(0xFFFF5252), modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "입차 시간과 주차 요금은 오차가 있을 수 있습니다",
+                            "입차 시간과 주차 요금은 오차가 있을 수 있습니다",
                             color = Color.Gray,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium
@@ -259,4 +239,56 @@ fun RegisterScreen(
             }
         }
     }
+}
+
+// 3. Bottom Sheet 내부 컨텐츠 (디자인 반영)
+@Composable
+fun RegisterBottomSheetContent(
+    onExitClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, bottom = 50.dp, top = 10.dp), // 하단 여백 충분히
+        verticalArrangement = Arrangement.spacedBy(12.dp) // 버튼 사이 간격
+    ) {
+        // 1. 출차하기 (파란색)
+        Button(
+            onClick = onExitClick,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)), // 파란색
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text("출차하기", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+
+        // 2. 정보 수정하기 (회색)
+        Button(
+            onClick = onEditClick,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9E9E9E)), // 회색
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text("정보 수정하기", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+
+        // 3. 등록 삭제하기 (빨간색)
+        Button(
+            onClick = onDeleteClick,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF5252)), // 빨간색
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text("등록 삭제하기", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+// Preview
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    RegisterScreen()
 }

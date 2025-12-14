@@ -9,6 +9,6 @@ import com.hyun.sesac.shared.navigation.RegisterNavigationRoute
 
 fun NavGraphBuilder.registerNavGraph(navController: NavController) {
     composable<RegisterNavigationRoute.RegisterTab>{
-        RegisterScreen(navController)
+        RegisterScreen()
     }
 }
