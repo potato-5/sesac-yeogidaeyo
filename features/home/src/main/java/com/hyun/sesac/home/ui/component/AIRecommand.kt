@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -27,19 +26,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hyun.sesac.domain.model.AiRecommendValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AiRecommend(
     height: Dp,
-    listState: LazyListState = rememberLazyListState()
+    recommendList: List<AiRecommendValue>,
+    onFavoriteClick: (String) -> Unit,
+    listState: LazyListState
 ) {
     Column(
         modifier = Modifier // modifier 순서 중요함 !
             .heightIn(max = height) // <--- 전체 높이 제한은 여기서!
             .fillMaxSize()
-            /*.fillMaxWidth()
-            .fillMaxHeight()*/
     ) {
         BottomSheetDefaults.DragHandle(
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -73,25 +73,21 @@ fun AiRecommend(
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
+            // value 받기
             item {
                 LazyRow(contentPadding = PaddingValues(horizontal = 16.dp)) {
-                    items(5) {
-                        CardView()
+                    items(
+                        items = recommendList,
+                        key = {it.id}
+                    ){ item ->
+                        CardView(
+                            item = item,
+                            onFavoriteClick = { onFavoriteClick(item.id) }
+                        )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                 }
             }
-            /*item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Text("스크롤 가능한 추가 콘텐츠")
-                    Text("스크롤 가능한 추가 콘텐츠")
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-            }*/
         }
     }
 }

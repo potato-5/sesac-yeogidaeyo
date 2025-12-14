@@ -16,35 +16,37 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hyun.sesac.home.ui.component.AiRecommend
 import com.hyun.sesac.home.ui.component.HomeBackGround
 import com.hyun.sesac.home.ui.component.TopSearchBar
-import com.hyun.sesac.shared.navigation.HomeNavigationRoute
+import com.hyun.sesac.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
-
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
+fun HomeScreen(
+    paddingValues: PaddingValues,
+    onNavigateToSearch: () -> Unit,
+    viewModel: HomeViewModel
+) {
     // 12/08 TODO BottomSheet Coroutine으로 main thread에서 실행 안되도록 ( 예제 찾아보면 잇음 )
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val configuration = LocalConfiguration.current
     val fullScreenHeight = configuration.screenHeightDp.dp
     val searchBarHeight = 60.dp
     val statusBarHeight = paddingValues.calculateTopPadding()
     val bottomBarHeight = paddingValues.calculateBottomPadding()
-    Log.d("전체 화면 높이","$fullScreenHeight")
-    Log.d("상태바 높이","$statusBarHeight")
 
     val sheetMaxHeight = fullScreenHeight - statusBarHeight - searchBarHeight - bottomBarHeight - 4.dp
 
@@ -77,14 +79,16 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
         sheetContent = {
             AiRecommend(
                 height = sheetMaxHeight,
-                listState = aiRecommendListState
+                listState = aiRecommendListState,
+                recommendList = uiState.recommendList,
+                onFavoriteClick = viewModel::onFavoriteClick
             )
-            Log.d("바텀시트 최대높이","$sheetMaxHeight")
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContainerColor = Color.White,
         sheetDragHandle = null,
-    ) { innerPadding ->
+
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -96,9 +100,9 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
                     .align(Alignment.TopCenter)
                     .statusBarsPadding()
                     .padding(horizontal = 24.dp),
-                onSearchClicked = {
-                    navController.navigate(HomeNavigationRoute.SearchScreen)
-                }
+                onSearchClicked =
+                    //navController.navigate(HomeNavigationRoute.SearchScreen)
+                    onNavigateToSearch
             )
             // TODO floating button 내 위치 버튼
         }

@@ -27,7 +27,7 @@ import com.hyun.sesac.shared.navigation.HomeNavigationRoute
 import com.hyun.sesac.ui.component.BottomAppBarItem
 import kotlin.reflect.KClass
 
-@SuppressLint("RememberReturnType", "RestrictedApi")
+@SuppressLint("RememberReturnType")
 @Preview(showBackground = true)
 @Composable
 fun EntryScreen() {

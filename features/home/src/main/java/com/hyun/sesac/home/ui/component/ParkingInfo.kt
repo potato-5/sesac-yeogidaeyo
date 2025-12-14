@@ -44,13 +44,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hyun.sesac.domain.model.ParkingDetail
 import com.hyun.sesac.home.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParkingInfo(
     height: Dp,
-    listState: LazyListState = rememberLazyListState()
+    listState: LazyListState,
+    data: ParkingDetail,
+    onFavoriteClick: () -> Unit
 ) {
     Column(
         modifier = Modifier // modifier 순서 중요함 !
@@ -65,10 +68,8 @@ fun ParkingInfo(
         )
 
         LazyColumn(
+            //modifier = Modifier.fillMaxWidth(),
             state = listState,
-            modifier = Modifier
-                .fillMaxWidth(),
-            // .padding(horizontal = 16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -80,18 +81,18 @@ fun ParkingInfo(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "서울시청 본청사",
+                        text = data.name, //"서울시청 본청사",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 22.sp
                         )
                     )
                     // 하트 아이콘
-                    IconButton(onClick = { /* 클릭 동작 */ }) {
+                    IconButton(onClick = onFavoriteClick) {
                         Icon(
                             imageVector = Icons.Default.Favorite,
                             contentDescription = "즐겨찾기",
-                            tint = Color.Red
+                            tint = if(data.isFavorite) Color.Red else Color.Gray
                         )
                     }
                 }
@@ -126,59 +127,12 @@ fun ParkingInfo(
             }
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp),
-                            text = "운영 중", fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp),
-                            text = "09:00 ~ 21:00"
-                        )
-                    }
+                    // [변경] 상세 정보 바인딩 helper 함수 사용 추천
+                    InfoRow(label = "운영 중", value = data.operatingTime)
+                    InfoRow(label = "기본 요금", value = data.priceInfo)
+                    InfoRow(label = data.distance, value = data.address)
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp),
-                            text = "기본 요금", fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp),
-                            text = "무료/10분"
-                        )
-                    }
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp),
-                            text = "0.5km", fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 20.dp),
-                            text = "중구 세종대로 110"
-                        )
-                    }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "지번",
@@ -189,79 +143,29 @@ fun ParkingInfo(
                                 .padding(horizontal = 4.dp, vertical = 2.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(text = "중구 태평로 1가 31-0", color = Color.Gray, fontSize = 14.sp)
+                        Text(text = data.fullAddress, color = Color.Gray, fontSize = 14.sp)
                     }
                 }
             }
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp) // 박스 사이 간격
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // --- 왼쪽 박스 (전체 주차면) ---
-                    Column(
-                        modifier = Modifier
-                            .weight(1f) // 1:1 비율
-                            .clip(RoundedCornerShape(12.dp))
-                            .border(BorderStroke(1.dp, Color.LightGray), RoundedCornerShape(12.dp))
-                    ) {
-                        // 타이틀 (위쪽 흰 배경)
-                        Box(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(text = "전체 주차면", fontSize = 14.sp, color = Color.Gray)
-                        }
-                        // 숫자 (아래쪽 회색 배경)
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.Gray) // 회색
-                                .padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "101",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 24.sp
-                            )
-                        }
-                    }
-
-                    // --- 오른쪽 박스 (주차 가능면) ---
-                    Column(
-                        modifier = Modifier
-                            .weight(1f) // 1:1 비율
-                            .clip(RoundedCornerShape(12.dp))
-                            .border(
-                                BorderStroke(1.dp, Color(0xFF2196F3).copy(alpha = 0.3f)),
-                                RoundedCornerShape(12.dp)
-                            )
-                    ) {
-                        // 타이틀
-                        Box(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(text = "주차 가능면", fontSize = 14.sp, color = Color(0xFF2196F3))
-                        }
-                        // 숫자 (아래쪽 파란 배경)
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color(0xFF2196F3)) // 파란색
-                                .padding(vertical = 12.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "54",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 24.sp
-                            )
-                        }
-                    }
+                    // [변경] 전체 주차면
+                    ParkingCountBox(
+                        title = "전체 주차면",
+                        count = data.totalSpaces,
+                        color = Color.Gray,
+                        modifier = Modifier.weight(1f)
+                    )
+                    // [변경] 주차 가능면
+                    ParkingCountBox(
+                        title = "주차 가능면",
+                        count = data.availableSpaces,
+                        color = Color(0xFF2196F3),
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
             item {
@@ -331,6 +235,42 @@ fun ParkingInfo(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun InfoRow(label: String, value: String){
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Text(modifier = Modifier.padding(end = 20.dp), text = label, fontWeight = FontWeight.SemiBold)
+        Text(text = value)
+    }
+}
+
+@Composable
+fun ParkingCountBox(title: String, count: Int, color: Color, modifier: Modifier) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .border(BorderStroke(1.dp, color.copy(alpha = 0.3f)), RoundedCornerShape(12.dp))
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = title, fontSize = 14.sp, color = color)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color)
+                .padding(vertical = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "$count", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
         }
     }
 }

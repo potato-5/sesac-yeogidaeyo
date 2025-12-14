@@ -1,4 +1,4 @@
-package com.hyun.sesac.home.ui
+package com.hyun.sesac.home.ui.state
 
 data class SearchUiState(
     val query: String = "",

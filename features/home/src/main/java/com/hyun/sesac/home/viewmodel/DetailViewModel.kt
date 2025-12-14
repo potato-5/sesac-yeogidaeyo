@@ -3,10 +3,9 @@ package com.hyun.sesac.home.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.toRoute
 import com.hyun.sesac.domain.model.ParkingDetail
-import com.hyun.sesac.home.ui.DetailUiState
+import com.hyun.sesac.home.ui.state.DetailUiState
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle // hilt 자동 주입
 ) : ViewModel(){
     private val routeArgs = savedStateHandle.toRoute<HomeNavigationRoute.DetailScreen>()
     val searchQuery = routeArgs.searchValue

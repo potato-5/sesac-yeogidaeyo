@@ -16,13 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hyun.sesac.home.R
+import com.hyun.sesac.domain.model.AiRecommendValue
 
-@Preview
 @Composable
-fun CardView(modifier: Modifier = Modifier) {
+fun CardView(
+    item: AiRecommendValue,
+    onFavoriteClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
             .width(220.dp)
@@ -43,7 +45,7 @@ fun CardView(modifier: Modifier = Modifier) {
             ) {
                 // 이미지 Placeholder
                 Image(
-                    painter = painterResource(id = R.drawable.parking),
+                    painter = painterResource(id = item.imageUrl as Int),
                     contentDescription = "주차장 이미지",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -52,7 +54,7 @@ fun CardView(modifier: Modifier = Modifier) {
                 )
 
                 IconButton(
-                    onClick = { /* TODO: 즐겨찾기 기능 */ },
+                    onClick = { onFavoriteClick },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
@@ -62,7 +64,7 @@ fun CardView(modifier: Modifier = Modifier) {
                     Icon(
                         imageVector = Icons.Filled.Favorite,
                         contentDescription = "즐겨찾기",
-                        tint = Color.Red.copy(alpha = 0.8f)
+                        tint = if(item.isFavorite) Color.Red.copy(alpha = 0.8f) else Color.Gray
                     )
                 }
             }
@@ -74,16 +76,17 @@ fun CardView(modifier: Modifier = Modifier) {
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "남부초등학교 공영주차장",
+                    text = item.name,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     color = Color.Black,
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    maxLines = 1
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "이용시간: 09:00 - 21:00",
+                    text = "이용시간: ${item.operatingTime}",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.DarkGray
                 )
@@ -91,7 +94,7 @@ fun CardView(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "이용요금: 3,000원 (분당)",
+                    text = "이용요금: ${item.priceInfo}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary
                 )

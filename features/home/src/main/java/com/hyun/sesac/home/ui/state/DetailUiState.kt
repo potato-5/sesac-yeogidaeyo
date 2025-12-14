@@ -1,4 +1,4 @@
-package com.hyun.sesac.home.ui
+package com.hyun.sesac.home.ui.state
 
 import com.hyun.sesac.domain.model.ParkingDetail
 

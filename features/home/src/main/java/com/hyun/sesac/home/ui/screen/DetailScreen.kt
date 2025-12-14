@@ -6,24 +6,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -37,9 +36,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    navController: NavController,
+    //navController: NavController,
+    //searchQuery: String,
     paddingValues: PaddingValues,
-    searchQuery: String,
     onBackClicked: () -> Unit,
     viewModel: DetailViewModel
 ) {
@@ -54,17 +53,16 @@ fun DetailScreen(
     val sheetMaxHeight = fullScreenHeight - searchBarHeight - statusBarHeight - bottomBarHeight
     val sheetHalfHeight = fullScreenHeight/2 - bottomBarHeight
 
-    var searchTextState by remember { mutableStateOf(TextFieldValue("서울시청")) }
     val sheetState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue = SheetValue.PartiallyExpanded,
             skipHiddenState = true
         )
     )
-
     // ParkingInfo 내부 리스트 스크롤 state
     val parkingInfoListState = rememberLazyListState()
-    // bottom sheet state + scroll init
+
+    // bottom sheet state scroll init
     LaunchedEffect(sheetState.bottomSheetState){
         snapshotFlow{ sheetState.bottomSheetState.targetValue }
             .distinctUntilChanged()
@@ -76,36 +74,44 @@ fun DetailScreen(
             }
     }
 
+    // TODO 수정 -> 검색결과가 없으면 없다고 보여주기
     BottomSheetScaffold(
         scaffoldState = sheetState,
         sheetDragHandle = null,
         sheetContent = {
-            ParkingInfo(
-                height = sheetMaxHeight,
-                listState = parkingInfoListState
-            )
+            uiState.parkingDetail?.let { detail ->
+                ParkingInfo(
+                    height = sheetMaxHeight,
+                    listState = parkingInfoListState,
+                    data = detail,
+                    onFavoriteClick = viewModel::onFavoriteClick
+                )
+            } ?: Box(modifier = Modifier.height(sheetMaxHeight)){
+                Text("로딩중...", modifier = Modifier.align(Alignment.Center))
+            }
         },
         sheetPeekHeight = sheetHalfHeight,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContainerColor = Color.White,
         modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+    ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             HomeBackGround()
 
-            /*SearchTopBar(
-                isSearchMode = false,
-                onBackClicked = { navController.popBackStack() },
-                searchText = searchTextState,
-                onQueryChange = { newValue -> searchTextState = newValue },
-                onSearchAction = { },
+            SearchTopBar(
                 modifier = Modifier
                     .fillMaxWidth(),
-                resultQuery = "서울시청"
-            )*/
+                isSearchMode = false,
+                searchQuery = "",
+                onQueryChange = {},
+                onClearQuery = {},
+                onBackClicked = onBackClicked,
+                onSearchAction = {},
+                // 1. api name -> 2. 초기 검색어
+                resultQuery = uiState.parkingDetail?.name?:viewModel.searchQuery,
+            )
             // TODO floating button 내 위치 버튼
         }
     }
