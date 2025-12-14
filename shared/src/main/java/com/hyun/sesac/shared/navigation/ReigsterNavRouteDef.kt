@@ -5,7 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface RegisterNavigationRoute : YeogidaeyoNavigation {
     @Serializable
-    data object RegisterTab : RegisterNavigationRoute{
-        override val route = "Register"
-    }
+    data object RegisterTab : RegisterNavigationRoute
 }

@@ -17,6 +17,7 @@ import com.hyun.sesac.ui.theme.YeogidaeyoTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO splash 화면 추가
         enableEdgeToEdge()
         setContent {
             YeogidaeyoTheme {

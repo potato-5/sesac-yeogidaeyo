@@ -19,17 +19,17 @@ data class BottomAppBarItem(
     companion object{
         fun fetchBottomAppBarItems() = listOf(
             BottomAppBarItem(
-                tabName = "Home",
+                tabName = "홈",
                 icon = Icons.Filled.Home,
                 destination = HomeNavigationRoute.HomeTab
             ),
             BottomAppBarItem(
-                tabName = "Register",
+                tabName = "주차 등록",
                 icon = Icons.Filled.AddCircleOutline,
                 destination = RegisterNavigationRoute.RegisterTab
             ),
             BottomAppBarItem(
-                tabName = "MyPage",
+                tabName = "내 설정",
                 icon = Icons.Filled.PersonOutline,
                 destination = MyPageNavigationRoute.MyPageTab
             )

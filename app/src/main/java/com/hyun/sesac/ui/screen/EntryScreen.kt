@@ -1,18 +1,20 @@
 package com.hyun.sesac.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -23,41 +25,50 @@ import com.hyun.sesac.mypage.navigation.myPageNavGraph
 import com.hyun.sesac.register.navigation.registerNavGraph
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
 import com.hyun.sesac.ui.component.BottomAppBarItem
+import kotlin.reflect.KClass
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("RememberReturnType", "RestrictedApi")
 @Preview(showBackground = true)
 @Composable
 fun EntryScreen() {
-
     val navController = rememberNavController()
 
     val bottomAppBarItems = remember {
         BottomAppBarItem.Companion.fetchBottomAppBarItems()
     }
 
+    // 백스택 state 관찰
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // TODO bottomBar 여부
-    val routesToHideBottomBar = remember {
-        listOf(
-            HomeNavigationRoute.SearchScreen.route,
-            HomeNavigationRoute.DetailScreen.route,
+    val hideBottomBarRoutes = remember {
+        listOf<KClass<*>>(
+            HomeNavigationRoute.SearchScreen::class,
+            HomeNavigationRoute.DetailScreen::class,
         )
     }
 
-    val showBottomBar = currentDestination?.route !in routesToHideBottomBar
+    val showBottomBar by remember(currentDestination) {
+        derivedStateOf {
+            currentDestination?.let { dest ->
+                hideBottomBarRoutes.none { kClass -> dest.hasRoute(kClass) }
+            } ?: true
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar {
-                    bottomAppBarItems.forEachIndexed { _, bottomItem ->
+                    bottomAppBarItems.forEach{ bottomItem ->
+
+                        val isSelected = currentDestination?.hierarchy?.any { destination ->
+                            destination.hasRoute(bottomItem.destination::class)
+                        } == true
+
                         NavigationBarItem(
-                            selected = currentDestination
-                                ?.hierarchy
-                                ?.any { it.route == bottomItem.destination.route } == true,
+                            selected = isSelected,
                             label = {
                                 Text(
                                     text = bottomItem.tabName, color = Color.Blue
@@ -71,7 +82,7 @@ fun EntryScreen() {
                                 )
                             },
                             onClick = {
-                                navController.navigate(bottomItem.destination.route) {
+                                navController.navigate(bottomItem.destination) {
                                     popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true //현재 화면의 상태를 저장
                                     }
@@ -85,8 +96,8 @@ fun EntryScreen() {
         }) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = HomeNavigationRoute.HomeTab.route,
-            //startDestination = "homescreen",
+            startDestination = HomeNavigationRoute.HomeTab,
+            //startDestination = "HomeScreen",
             //modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             homeNavGraph(navController, paddingValues)

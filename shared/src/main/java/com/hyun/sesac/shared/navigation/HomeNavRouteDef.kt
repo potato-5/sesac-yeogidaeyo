@@ -4,18 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface HomeNavigationRoute : YeogidaeyoNavigation {
+    // 12/08 TODO ROUTE 로 구분하는 방식은 옛날 방식 , 예제 방식 ( 과제 ) 보고 변경
     @Serializable
-    data object HomeTab : HomeNavigationRoute {
-        override val route = "Home"
-    }
+    data object HomeTab : HomeNavigationRoute
 
     @Serializable
-    data object SearchScreen : HomeNavigationRoute {
-        override val route = "SearchScreen"
-    }
+    data object SearchScreen : HomeNavigationRoute
 
     @Serializable
-    data object DetailScreen : HomeNavigationRoute {
-        override val route = "DetailScreen"
-    }
+    data class DetailScreen(val searchValue: String) : HomeNavigationRoute
 }

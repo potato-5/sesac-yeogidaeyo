@@ -23,7 +23,6 @@ import com.hyun.sesac.home.R
 @Preview
 @Composable
 fun CardView(modifier: Modifier = Modifier) {
-    // 1. 주 컨테이너: Card (elevation과 둥근 모서리 제공)
     Card(
         modifier = modifier
             .width(220.dp)
@@ -47,11 +46,11 @@ fun CardView(modifier: Modifier = Modifier) {
                     painter = painterResource(id = R.drawable.parking),
                     contentDescription = "주차장 이미지",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                 )
 
-                // 하트 아이콘 (우측 상단 플로팅)
                 IconButton(
                     onClick = { /* TODO: 즐겨찾기 기능 */ },
                     modifier = Modifier
@@ -74,7 +73,6 @@ fun CardView(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
-                // 주차장 이름
                 Text(
                     text = "남부초등학교 공영주차장",
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
@@ -84,7 +82,6 @@ fun CardView(modifier: Modifier = Modifier) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // 이용 시간
                 Text(
                     text = "이용시간: 09:00 - 21:00",
                     style = MaterialTheme.typography.bodySmall,
@@ -93,7 +90,6 @@ fun CardView(modifier: Modifier = Modifier) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // 이용 요금
                 Text(
                     text = "이용요금: 3,000원 (분당)",
                     style = MaterialTheme.typography.bodySmall,

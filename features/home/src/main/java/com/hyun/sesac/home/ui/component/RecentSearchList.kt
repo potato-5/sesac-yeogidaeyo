@@ -27,26 +27,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
 
 @Composable
-fun RecentSearchList(navController: NavHostController, modifier: Modifier){
-    val searchItems = listOf(
-        "청년취업사관학교 동대문캠퍼스",
-        "서울시청 본청사 주차장",
-        "하이디라오 명동점",
-        "동대문 공영주차장(시)"
-    )
-
-//    val onSearchExecute: (String) -> Unit = { query ->
-//        navController.navigate("${HomeNavigationRoute.DetailScreen.route}/$query")
-//    }
-    val onSearchExecute: (String) -> Unit = {
-        navController.navigate(HomeNavigationRoute.DetailScreen.route)
-    }
-
-    LazyColumn(modifier = modifier
+fun RecentSearchList(
+    modifier: Modifier,
+    recentSearch: List<String>,
+    onItemClicked: (String) -> Unit,
+    onDeleteClicked: (String) -> Unit
+    //navController: NavController,
+){
+    LazyColumn(
+        modifier = modifier
         .fillMaxSize()
         .background(Color.White)
     ) {
@@ -56,11 +50,11 @@ fun RecentSearchList(navController: NavHostController, modifier: Modifier){
             HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
         }
 
-        items(searchItems){ item ->
+        items(recentSearch){ item ->
             RecentSearchItem(
                 text = item,
-                onItemClicked = { onSearchExecute(item) },
-                onDeleteClicked = { /*TODO 삭제*/ }
+                onItemClicked = { onItemClicked(item) },
+                onDeleteClicked = { onDeleteClicked(item) }
             )
             HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
         }
