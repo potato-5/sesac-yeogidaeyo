@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.hyun.sesac.domain.model.ParkingDetail
+import com.hyun.sesac.domain.model.ParkingDetailModel
 import com.hyun.sesac.home.ui.state.DetailUiState
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
 import kotlinx.coroutines.delay
@@ -41,7 +41,7 @@ class DetailViewModel(
             delay(1000)
 
             // usecase로 대체
-            val mockData = ParkingDetail(
+            val mockData = ParkingDetailModel(
                 name = query,
                 address = "중구 세종대로 110",
                 fullAddress = "중구 태평로 1가 31-0",

@@ -40,11 +40,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hyun.sesac.domain.model.ParkingDetail
+import com.hyun.sesac.domain.model.ParkingDetailModel
 import com.hyun.sesac.home.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +51,7 @@ import com.hyun.sesac.home.R
 fun ParkingInfo(
     height: Dp,
     listState: LazyListState,
-    data: ParkingDetail,
+    data: ParkingDetailModel,
     onFavoriteClick: () -> Unit
 ) {
     Column(

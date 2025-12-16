@@ -1,6 +1,5 @@
 package com.hyun.sesac.home.ui.component
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,13 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.hyun.sesac.domain.model.AiRecommendValue
+import com.hyun.sesac.domain.model.AiRecommendModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AiRecommend(
     height: Dp,
-    recommendList: List<AiRecommendValue>,
+    recommendList: List<AiRecommendModel>,
     onFavoriteClick: (String) -> Unit,
     listState: LazyListState
 ) {

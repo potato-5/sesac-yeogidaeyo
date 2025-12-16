@@ -32,12 +32,12 @@ import com.hyun.sesac.register.R
 fun RegisterScreen(
     modifier: Modifier = Modifier
 ) {
-    // ViewModel 대신 UI 내부에서 상태 관리 (화면 회전 대응)
+    // ViewModel (화면 회전 대응)
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
-    // 공통 닫기 로직 (애니메이션 후 상태 변경)
+    // bottom sheet hide 로직 (애니메이션 후 상태 변경)
     val closeSheet: () -> Unit = {
         scope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) showBottomSheet = false
@@ -76,14 +76,14 @@ fun RegisterScreen(
     }
 }
 
-// 2. 메인 화면 UI (Stateless): 보여주기만 담당
+// 2. 메인 화면 UI (Stateless)
 @Composable
 fun RegisterScreenContent(
     modifier: Modifier = Modifier,
     locationName: String = "서울시청 본청사 주차장",
     spotName: String = "B1A 23",
     entryTime: String = "10:30",
-    cost: String = "30,000 원",
+    cost: String = "30,000",
     onMoreClicked: () -> Unit // 이벤트 호이스팅
 ) {
     Column(
@@ -102,14 +102,14 @@ fun RegisterScreenContent(
             text = "AI와 함께 나의 주차 위치를 한눈에",
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray,
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(bottom = 20.dp)
         )
 
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
@@ -117,7 +117,7 @@ fun RegisterScreenContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(320.dp)
+                        .height(342.dp)
                 ) {
                     // 더미 이미지
                     Image(
@@ -159,15 +159,15 @@ fun RegisterScreenContent(
                         )
                     }
 
-                    // 하단 정보 오버레이
+                    // 주차 정보 box
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
                             .padding(20.dp)
-                            .height(80.dp)
+                            .height(90.dp)
                             .background(
-                                color = Color.Black.copy(alpha = 0.6f),
+                                color = Color.Black.copy(alpha = 0.5f),
                                 shape = RoundedCornerShape(16.dp)
                             )
                             .padding(horizontal = 20.dp),
@@ -200,7 +200,10 @@ fun RegisterScreenContent(
                 }
 
                 // 카드 하단 정보 영역
-                Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+                ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -223,7 +226,7 @@ fun RegisterScreenContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(0xFFF5F5F5), RoundedCornerShape(12.dp))
-                            .padding(vertical = 14.dp, horizontal = 16.dp),
+                            .padding(vertical = 14.dp, horizontal = 14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(Icons.Default.Warning, null, tint = Color(0xFFFF5252), modifier = Modifier.size(18.dp))

@@ -40,6 +40,7 @@ kotlin{ jvmToolchain(21) }
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(project(":shared"))
 
     implementation(platform(libs.androidx.compose.bom))
@@ -47,6 +48,11 @@ dependencies {
     implementation(libs.bundles.compose.libraries)
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.play.services.maps)
+
+    implementation(libs.v2.user)
+    implementation(libs.kakao.maps)
+    implementation(libs.v2.all)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

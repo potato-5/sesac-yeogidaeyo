@@ -25,8 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import com.hyun.sesac.home.ui.component.HomeBackGround
 import com.hyun.sesac.home.ui.component.ParkingInfo
 import com.hyun.sesac.home.ui.component.SearchTopBar
 import com.hyun.sesac.home.viewmodel.DetailViewModel
@@ -98,7 +96,7 @@ fun DetailScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            HomeBackGround()
+            //HomeBackGround()
 
             SearchTopBar(
                 modifier = Modifier

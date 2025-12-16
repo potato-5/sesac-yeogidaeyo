@@ -17,11 +17,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.hyun.sesac.domain.model.AiRecommendValue
+import com.hyun.sesac.domain.model.AiRecommendModel
 
 @Composable
 fun CardView(
-    item: AiRecommendValue,
+    item: AiRecommendModel,
     onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

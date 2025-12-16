@@ -24,8 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.hyun.sesac.home.ui.component.AiRecommend
-import com.hyun.sesac.home.ui.component.HomeBackGround
+import com.hyun.sesac.home.ui.component.KaKaoMapScreen
 import com.hyun.sesac.home.ui.component.TopSearchBar
 import com.hyun.sesac.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -36,7 +38,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 fun HomeScreen(
     paddingValues: PaddingValues,
     onNavigateToSearch: () -> Unit,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
 ) {
     // 12/08 TODO BottomSheet Coroutine으로 main thread에서 실행 안되도록 ( 예제 찾아보면 잇음 )
 
@@ -93,7 +95,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            HomeBackGround()
+            KaKaoMapScreen(viewModel)
 
             TopSearchBar(
                 modifier = Modifier

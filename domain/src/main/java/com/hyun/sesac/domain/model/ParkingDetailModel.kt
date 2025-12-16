@@ -1,6 +1,6 @@
 package com.hyun.sesac.domain.model
 
-data class ParkingDetail(
+data class ParkingDetailModel(
     val name: String,
     val address: String,
     val fullAddress: String,

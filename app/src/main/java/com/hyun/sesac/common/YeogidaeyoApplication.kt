@@ -5,12 +5,16 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import com.kakao.sdk.common.KakaoSdk
+import com.kakao.vectormap.KakaoMapSdk
 
 class YeogidaeyoApplication : Application() {
     override fun onCreate(){
         super.onCreate()
         yeogidaeyoApp = this
         fixOrientationPortrait()
+        KakaoSdk.init(this, "2635106b67f96e5c3fc879bee650db4f") // TODO secret 에 넣기
+        KakaoMapSdk.init(this, "2635106b67f96e5c3fc879bee650db4f")
     }
     companion object{
         private lateinit var yeogidaeyoApp : YeogidaeyoApplication
@@ -18,6 +22,7 @@ class YeogidaeyoApplication : Application() {
     }
     // TODO FIREBASE, COIL 등 설정
     // 단말기 화면 세로모드 고정
+
     private fun fixOrientationPortrait(){
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
         @SuppressLint("SourceLockedOrientationActivity")
