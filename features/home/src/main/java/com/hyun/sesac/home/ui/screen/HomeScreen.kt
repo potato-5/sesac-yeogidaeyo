@@ -24,10 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.hyun.sesac.home.ui.component.AiRecommend
-import com.hyun.sesac.home.ui.component.KaKaoMapScreen
+import com.hyun.sesac.home.ui.component.KakaoMapScreen
 import com.hyun.sesac.home.ui.component.TopSearchBar
 import com.hyun.sesac.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -95,7 +93,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            KaKaoMapScreen(viewModel)
+            KakaoMapScreen()
 
             TopSearchBar(
                 modifier = Modifier

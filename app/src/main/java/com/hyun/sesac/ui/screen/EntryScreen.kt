@@ -20,6 +20,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hyun.sesac.common.YeogidaeyoApplication
 import com.hyun.sesac.home.navigation.homeNavGraph
 import com.hyun.sesac.mypage.navigation.myPageNavGraph
 import com.hyun.sesac.register.navigation.registerNavGraph
@@ -28,7 +29,6 @@ import com.hyun.sesac.ui.component.BottomAppBarItem
 import kotlin.reflect.KClass
 
 @SuppressLint("RememberReturnType")
-@Preview(showBackground = true)
 @Composable
 fun EntryScreen() {
     val navController = rememberNavController()

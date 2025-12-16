@@ -43,8 +43,9 @@ dependencies {
     implementation(project(":shared"))
 
     implementation(platform(libs.androidx.compose.bom))
-
+    implementation(libs.bundles.coroutines)
     implementation(libs.bundles.compose.libraries)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
 

@@ -13,20 +13,17 @@ import com.hyun.sesac.home.ui.screen.HomeScreen
 import com.hyun.sesac.home.ui.screen.SearchScreen
 import com.hyun.sesac.home.viewmodel.DetailViewModel
 import com.hyun.sesac.home.viewmodel.HomeViewModel
-import com.hyun.sesac.home.viewmodel.HomeViewModelFactory
 import com.hyun.sesac.home.viewmodel.SearchViewModel
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
 
 // navController를 screen으로 넘겨서 .navigate()호출 x
-fun NavGraphBuilder.homeNavGraph(navController: NavController, paddingValues: PaddingValues) {
+fun NavGraphBuilder.homeNavGraph(
+    navController: NavController,
+    paddingValues: PaddingValues, ) {
+
     //composable("homescreen")
     composable<HomeNavigationRoute.HomeTab>{
-       // val viewModel: HomeViewModel = viewModel()
-
-        val repository = remember { KakaoRepositoryImpl() }
-        val useCase = remember { GetMarkersUseCase(repository) }
-        val factory = remember { HomeViewModelFactory(useCase) }
-        val viewModel: HomeViewModel = viewModel(factory = factory)
+        val viewModel: HomeViewModel = viewModel()
 
         HomeScreen(
             paddingValues = paddingValues,

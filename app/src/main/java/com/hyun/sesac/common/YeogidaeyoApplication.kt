@@ -5,8 +5,14 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import com.hyun.sesac.data.impl.KakaoRepositoryImpl
+import com.hyun.sesac.data.remote.KakaoApiClient
+import com.hyun.sesac.domain.repository.KakaoRepository
+import com.hyun.sesac.domain.usecase.GetMarkersUseCase
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.vectormap.KakaoMapSdk
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class YeogidaeyoApplication : Application() {
     override fun onCreate(){
@@ -22,7 +28,6 @@ class YeogidaeyoApplication : Application() {
     }
     // TODO FIREBASE, COIL 등 설정
     // 단말기 화면 세로모드 고정
-
     private fun fixOrientationPortrait(){
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
         @SuppressLint("SourceLockedOrientationActivity")

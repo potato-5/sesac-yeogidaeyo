@@ -44,9 +44,8 @@ dependencies {
 
     implementation(libs.play.services.location)
 
-    implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-    implementation(libs.moshi.kotlin)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.bundles.retrofits)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)

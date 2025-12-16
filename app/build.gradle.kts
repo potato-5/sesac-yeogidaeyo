@@ -54,12 +54,16 @@ dependencies {
     implementation(project(":features:mypage"))
     implementation(project(":features:register"))
     implementation(project(":shared"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(platform(libs.androidx.compose.bom))
 
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose.libraries)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.bundles.retrofits)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.material.icons.extended)

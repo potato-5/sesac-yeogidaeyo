@@ -18,6 +18,7 @@ material = "1.13.0"
 jetbrainsKotlinJvm = "2.2.21"
 navigationCompose = "2.9.6"
 coil = "2.7.0"
+coroutines = "1.10.2"
 
 kotlinxSerializationJson = "1.9.0"
 materialIconsExtended = "1.7.8"
@@ -45,6 +46,8 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 
 #xml 기반 관리용
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -111,7 +114,17 @@ compose-libraries=[
     "androidx-navigation-compose",
     "androidx-compose-material-icons-extended",
     "androidx-compose-foundation",
-    "coil-compose"
+    "coil-compose",
 ]
 
+coroutines = [
+    "kotlinx-coroutines-core",
+    "kotlinx-coroutines-android"
+]
+
+retrofits = [
+    "moshi-kotlin",
+    "retrofit",
+    "converter-moshi"
+]
 

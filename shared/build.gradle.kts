@@ -40,6 +40,7 @@ kotlin{ jvmToolchain(21) }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.coroutines)
     implementation(libs.bundles.compose.libraries)
 
     implementation(libs.androidx.core.ktx)
