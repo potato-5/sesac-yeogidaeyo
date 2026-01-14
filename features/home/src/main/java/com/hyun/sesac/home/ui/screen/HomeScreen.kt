@@ -23,11 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hyun.sesac.home.ui.component.AiRecommend
 import com.hyun.sesac.home.ui.component.KakaoMapScreen
 import com.hyun.sesac.home.ui.component.TopSearchBar
+import com.hyun.sesac.home.ui.map.CurrentLocationScreen
 import com.hyun.sesac.home.viewmodel.HomeViewModel
+import com.hyun.sesac.home.viewmodel.CurrentLocationViewModel
+import com.hyun.sesac.home.viewmodel.MapViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -36,7 +40,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 fun HomeScreen(
     paddingValues: PaddingValues,
     onNavigateToSearch: () -> Unit,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
+    locationViewModel: CurrentLocationViewModel = hiltViewModel(),
+    parkingViewModel: MapViewModel = hiltViewModel()
 ) {
     // 12/08 TODO BottomSheet Coroutine으로 main thread에서 실행 안되도록 ( 예제 찾아보면 잇음 )
 
@@ -93,7 +99,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            KakaoMapScreen()
+            CurrentLocationScreen(locationViewModel,parkingViewModel)
 
             TopSearchBar(
                 modifier = Modifier

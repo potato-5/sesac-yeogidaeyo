@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -13,7 +14,6 @@ android {
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -40,7 +40,6 @@ kotlin{ jvmToolchain(21) }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":data"))
     implementation(project(":shared"))
 
     implementation(platform(libs.androidx.compose.bom))
@@ -49,11 +48,19 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     implementation(libs.v2.user)
     implementation(libs.kakao.maps)
     implementation(libs.v2.all)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -39,12 +40,19 @@ android {
 kotlin{ jvmToolchain(21) }
 
 dependencies {
+    implementation(project(":domain"))
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.compose.libraries)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets.gradle.plugin)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -43,7 +45,12 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+}
+
+secrets{
+    propertiesFileName = "secret.properties"
 }
 
 kotlin{ jvmToolchain(21) }
@@ -64,6 +71,8 @@ dependencies {
     implementation(libs.bundles.compose.libraries)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.retrofits)
+    implementation(libs.bundles.okhttps)
+    ksp(libs.moshi.codegen)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.material.icons.extended)
@@ -83,6 +92,11 @@ dependencies {
     implementation(libs.v2.user)
     implementation(libs.kakao.maps)
     implementation(libs.v2.all)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -13,14 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.hyun.sesac.common.YeogidaeyoApplication
 import com.hyun.sesac.home.navigation.homeNavGraph
 import com.hyun.sesac.mypage.navigation.myPageNavGraph
 import com.hyun.sesac.register.navigation.registerNavGraph
@@ -101,8 +99,8 @@ fun EntryScreen() {
             //modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             homeNavGraph(navController, paddingValues)
-            myPageNavGraph(navController)
-            registerNavGraph(navController)
+            myPageNavGraph(navController, paddingValues)
+            registerNavGraph(navController,paddingValues)
         }
     }
 }

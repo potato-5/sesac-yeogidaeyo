@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.secrets.gradle.plugin)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -11,7 +13,6 @@ android {
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -29,9 +30,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
-kotlin{ jvmToolchain(21) }
+secrets {
+    propertiesFileName = "secret.properties"
+}
+
+kotlin { jvmToolchain(21) }
 
 dependencies {
     implementation(project(":domain"))
@@ -46,6 +55,11 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.retrofits)
+    implementation(libs.bundles.okhttps)
+    ksp(libs.moshi.codegen)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore.ktx)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">여기대요</string>
+    <string name="my_parking_register_title">내 주차 등록</string>
+    <string name="mypage_title">마이페이지</string>
+    <string name="settings_title">설정</string>
+    <string name="register_my_parking">주차 등록</string>
+    <string name="register_location_empty">위치 정보 없음</string>
+    <string name="register_spot_empty">정보 없음</string>
+    <string name="favorite_parking_title">즐겨찾는 주차장</string>
+    <string name="favorite_parking_empty">아직 즐겨찾기한 주차장이 없어요</string>
+    <string name="favorite_empty_desc_1">자주 가는 주차장을 저장해두면</string>
+    <string name="favorite_empty_desc_2">실시간 자리 현황을 바로 볼 수 있어요!</string>
+</resources>

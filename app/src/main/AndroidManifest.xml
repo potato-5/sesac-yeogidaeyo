@@ -25,9 +25,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Yeogidaeyo">
+        <service
+            android:name=".data.service.CurrentLocationService"
+            android:enabled="true"
+            android:foregroundServiceType="location"
+            tools:ignore="ExportedService" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="2635106b67f96e5c3fc879bee650db4f" />
+            android:value="${KAKAO_API_KEY}" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
