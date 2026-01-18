@@ -1,3 +1,4 @@
+/*
 package com.hyun.sesac.home.ui.map
 
 import android.Manifest
@@ -47,9 +48,11 @@ fun CurrentLocationScreen(
     val ctx = LocalContext.current
 
     // 서비스 시작을 위한 단일 함수
-    /*fun startLocation() {
+    */
+/*fun startLocation() {
         locationViewModel.startTracking()
-    }*/
+    }*//*
+
 
     // GPS 설정 요청 결과 처리
     val settingResultLauncher = rememberLauncherForActivityResult(
@@ -121,11 +124,13 @@ fun CurrentLocationScreen(
     }
 
     //현재 컴포즈 스크린 stop 시 서비스 중지
-    /*DisposableEffect(Unit) {
+    */
+/*DisposableEffect(Unit) {
         onDispose {
             locationViewModel.stopTracking()
         }
-    }*/
+    }*//*
+
 
     //초기 서울 시청
     val seoulCityHall = LatLng(37.566535, 126.9779692)
@@ -173,7 +178,8 @@ fun CurrentLocationScreen(
             )
         }
     }
-    /*GoogleMap(
+    */
+/*GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
@@ -182,16 +188,19 @@ fun CurrentLocationScreen(
             title = "현재 내 위치",
             snippet = "위도: ${markerState.position.latitude}, 경도: ${markerState.position.longitude}"
         )
-    }*/
+    }*//*
+
 }
 
 
+*/
 /**
  * GPS 설정(Setting) 상태를 확인하고 결과를 콜백으로 전달
  * @param context 컨텍스트
  * @param onGpsEnabled GPS가 이미 켜져 있을 때 호출될 콜백 함수
  * @param onGpsSettingResolve GPS 설정이 필요할 때(꺼져 있을 때) 호출될 콜백 함수
- */
+ *//*
+
 
 fun checkPhoneGpsSettings(
     context: Context,
@@ -228,4 +237,4 @@ fun checkPhoneGpsSettings(
             }
         }
     }
-}
+}*/

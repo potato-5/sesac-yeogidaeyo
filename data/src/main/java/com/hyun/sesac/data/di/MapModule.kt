@@ -1,7 +1,7 @@
 package com.hyun.sesac.data.di
 
 import android.content.Context
-import com.hyun.sesac.data.impl.CurrentLocationRepositoryImpl
+import com.hyun.sesac.data.repository.CurrentLocationRepositoryImpl
 import com.hyun.sesac.domain.repository.CurrentLocationRepository
 import com.hyun.sesac.domain.usecase.map.ObserveLocationUseCase
 import dagger.Module
@@ -26,11 +26,4 @@ object MapModule {
     // TODO 12/22 usecase는 여기 있으면 안됨
     // TODO 12/22 repository 따로 분리하기 srp 원칙 -> return 값이 두개면 안됨
     // TODO 12/22 느슨한 결합으로 해야 됨 / usecase는 inject 로 결합
-    @Provides
-    @Singleton
-    fun provideObserveLocationUseCase(
-        repository: CurrentLocationRepository
-    ): ObserveLocationUseCase{
-        return ObserveLocationUseCase(repository)
-    }
 }

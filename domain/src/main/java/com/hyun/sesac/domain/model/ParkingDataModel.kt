@@ -5,5 +5,7 @@ data class Parking(
     var name: String = "",
     var address: String = "",
     var latitude: Double = 0.0,
-    var longitude: Double = 0.0
+    var longitude: Double = 0.0,
+    var currentCnt: Int? = 0,
+    var totalCnt: Int = 0,
 )

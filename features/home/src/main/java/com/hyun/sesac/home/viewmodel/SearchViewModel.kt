@@ -1,5 +1,6 @@
 package com.hyun.sesac.home.viewmodel
 
+/*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hyun.sesac.home.ui.state.SearchUiState
@@ -85,4 +86,4 @@ class SearchViewModel : ViewModel(){
         _uiState.update { it.copy(query = "") }
     }
 
-}
+}*/

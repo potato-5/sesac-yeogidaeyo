@@ -14,4 +14,8 @@ data class ParkingLotDTO(
     var address : String = "",
     @get:PropertyName("location") @set:PropertyName("location")
     var location : GeoPoint? = null,
+    @get:PropertyName("current_parking_cars") @set:PropertyName("current_parking_cars")
+    var currentCnt : String = "",
+    @get:PropertyName("total_capacity") @set:PropertyName("total_capacity")
+    var totalCnt : String = "",
 )

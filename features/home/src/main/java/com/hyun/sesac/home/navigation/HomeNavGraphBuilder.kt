@@ -1,55 +1,36 @@
 package com.hyun.sesac.home.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.hyun.sesac.home.ui.screen.DetailScreen
 import com.hyun.sesac.home.ui.screen.HomeScreen
-import com.hyun.sesac.home.ui.screen.SearchScreen
-import com.hyun.sesac.home.viewmodel.DetailViewModel
-import com.hyun.sesac.home.viewmodel.HomeViewModel
-import com.hyun.sesac.home.viewmodel.SearchViewModel
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
-import com.hyun.sesac.home.viewmodel.CurrentLocationViewModel
 
-// navController를 screen으로 넘겨서 .navigate()호출 x
-// hilt를 사용 하면 viewmodel 사용 안해도 됌
 fun NavGraphBuilder.homeNavGraph(
     navController: NavController,
     paddingValues: PaddingValues) {
 
-    //composable("homescreen")
     composable<HomeNavigationRoute.HomeTab>{
         HomeScreen(
             paddingValues = paddingValues,
-            onNavigateToSearch = {
+            /*onNavigateToSearch = {
                 navController.navigate(HomeNavigationRoute.SearchScreen)
-            }
+            }*/
         )
     }
-    composable<HomeNavigationRoute.SearchScreen>{
-        val viewModel: SearchViewModel = viewModel()
-
-        SearchScreen(
-            onNavigateToDetail = { query ->
-                navController.navigate(HomeNavigationRoute.DetailScreen(query))
-            },
-            onBackClicked = { navController. popBackStack() },
-            viewModel = viewModel,
-        )
-    }
-    composable<HomeNavigationRoute.DetailScreen>{ backStackEntry ->
-        //val route: HomeNavigationRoute.DetailScreen = backStackEntry.toRoute()
-        val viewModel: DetailViewModel = viewModel()
-
-        DetailScreen(
-            //searchQuery = route.searchValue,
-            paddingValues = paddingValues,
-            onBackClicked = { navController. popBackStack() },
-            viewModel = viewModel
-        )
-    }
+    /*    composable<HomeNavigationRoute.SearchScreen>{
+            SearchScreen(
+                onNavigateToDetail = { query ->
+                    navController.navigate(HomeNavigationRoute.DetailScreen(query))
+                },
+                onBackClicked = { navController. popBackStack() }
+            )
+        }
+        composable<HomeNavigationRoute.DetailScreen>{ backStackEntry ->
+            DetailScreen(
+                paddingValues = paddingValues,
+                onBackClicked = { navController. popBackStack() }
+            )
+        }*/
 }

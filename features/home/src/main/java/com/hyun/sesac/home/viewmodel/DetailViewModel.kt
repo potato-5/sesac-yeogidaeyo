@@ -1,5 +1,5 @@
 package com.hyun.sesac.home.viewmodel
-
+/*
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -70,4 +70,4 @@ class DetailViewModel(
             )
         }
     }
-}
+}*/

@@ -31,6 +31,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 secrets {
@@ -56,14 +59,17 @@ dependencies {
     ksp(libs.moshi.codegen)
 
     // Room DB
-/*    implementation(libs.bundles.room.libraries)
+    implementation(libs.bundles.room.libraries)
     ksp(libs.androidx.room.compiler){
         exclude(group = "com.intellij", module = "annotations")
-    }*/
+    }
 
     // Hilt Core
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    // DataStore Preference
+    implementation(libs.androidx.datastore.preferences)
 
     //Firestore
     implementation(platform(libs.firebase.bom))

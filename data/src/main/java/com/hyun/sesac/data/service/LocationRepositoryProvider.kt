@@ -1,7 +1,7 @@
 package com.hyun.sesac.data.service
 
 import android.content.Context
-import com.hyun.sesac.data.impl.CurrentLocationRepositoryImpl
+import com.hyun.sesac.data.repository.CurrentLocationRepositoryImpl
 import com.hyun.sesac.domain.repository.CurrentLocationRepository
 
 object LocationRepositoryProvider {

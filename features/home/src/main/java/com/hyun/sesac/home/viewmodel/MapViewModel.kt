@@ -5,33 +5,76 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hyun.sesac.domain.common.DataResourceResult
 import com.hyun.sesac.domain.model.Parking
+import com.hyun.sesac.domain.repository.BookmarkRepository
 import com.hyun.sesac.domain.usecase.firestore.GetParkingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.forEach
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    //private val getParkingSpotsUseCase: GetParkingSpotsUseCase
-    private val getParkingUseCase: GetParkingUseCase
+    private val getParkingUseCase: GetParkingUseCase,
+    private val bookmarkRepository: BookmarkRepository
 ): ViewModel() {
 
+    // 전체 지도 마커용 ( firestore )
     private val _parkingSpots = MutableStateFlow<List<Parking>>(emptyList())
     val parkingSpots: StateFlow<List<Parking>> = _parkingSpots.asStateFlow()
 
-    private val _selectedSpot = MutableStateFlow<Parking?>(null)
-    val selectedSpot: StateFlow<Parking?> = _selectedSpot.asStateFlow()
+    private val _selectedSpotID = MutableStateFlow<String?>(null)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val selectedSpot: StateFlow<Parking?> = _selectedSpotID
+        .flatMapLatest { id ->
+            if (id == null) {
+                flowOf(null)
+            } else {
+                // (1) 일단 Firestore 목록에서 해당 주차장을 찾음 (이름, 주소, 전체대수 보존)
+                val firestoreSpot = _parkingSpots.value.find { it.id == id }
+
+                if (firestoreSpot == null) {
+                    flowOf(null) // Firestore에 없는 데이터면 null
+                } else {
+                    // (2) Room DB(즐겨찾기/실시간)를 관찰
+                    bookmarkRepository.getParking(id).map { roomData ->
+                        if (roomData != null) {
+                            firestoreSpot.copy(
+                                currentCnt = roomData.currentCnt
+                            )
+                        } else {
+                            firestoreSpot
+                        }
+                    }
+                }
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     init{
         loadParkingData()
+        refreshBookmarkRealtimeInfo()
     }
 
     fun onSpotSelected(spot: Parking){
-        _selectedSpot.value = spot
+        _selectedSpotID.value = spot.id
+    }
+
+    fun cleanSpot(){
+        _selectedSpotID.value = null
     }
 
     fun loadParkingData(){
@@ -58,6 +101,40 @@ class MapViewModel @Inject constructor(
             }
         }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isBookmarked: StateFlow<Boolean> = selectedSpot
+        .flatMapLatest{ parking ->
+            if(parking == null){
+                flowOf(false)
+            }else{
+                bookmarkRepository.isBookmarked(parking.id)
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
+
+    fun toggleBookmark(){
+        val currentSpot = selectedSpot.value ?: return
+
+        viewModelScope.launch{
+            if(isBookmarked.value){
+                bookmarkRepository.removeBookmark(currentSpot)
+            }else{
+                bookmarkRepository.addBookmark(currentSpot)
+            }
+        }
+    }
+
+    fun refreshBookmarkRealtimeInfo(){
+        viewModelScope.launch{
+            bookmarkRepository.syncBookMarkInfo()
+        }
+    }
+}
 /*
     private val _parkingSpots = MutableStateFlow<List<ParkingSpotModel>>(emptyList())
     val parkingSpots: StateFlow<List<ParkingSpotModel>> = _parkingSpots.asStateFlow()
@@ -89,4 +166,3 @@ class MapViewModel @Inject constructor(
                 }
         }
     }*/
-}

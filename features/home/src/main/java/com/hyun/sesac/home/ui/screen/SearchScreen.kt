@@ -1,5 +1,5 @@
 package com.hyun.sesac.home.ui.screen
-
+/*
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -97,3 +97,4 @@ fun SearchScreen(
         }
     }
 }
+*/

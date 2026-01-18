@@ -1,6 +1,6 @@
 package com.hyun.sesac.data.di
 
-import com.hyun.sesac.domain.repository.ParkingRepository
+import com.hyun.sesac.data.remote.api.ParkingApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -13,7 +13,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-// TODO 12/22 di 위치 domain
 // TODO 12/22 Network Module은 singleton으로 해야 됨 ( 계속 실행될 수는 없응까 )
 @Module
 @InstallIn(SingletonComponent::class)
@@ -49,15 +48,9 @@ object ApiModule {
     }
 
     // TODO ParkingApiServiceImpl(구현체), room db, dao 구현체
-/*    @Provides
-    @Singleton
-    fun provideParkingApiService(retrofit: Retrofit): ParkingApiService{
-        return retrofit.create(ParkingApiService::class.java)
-    }
-
     @Provides
     @Singleton
-    fun provideParkingRepository(apiService: ParkingApiService): ParkingRepository {
-        return ParkingRepositoryImpl(apiService)
-    }*/
+    fun provideParkingApiService(retrofit: Retrofit): ParkingApiService {
+        return retrofit.create(ParkingApiService::class.java)
+    }
 }

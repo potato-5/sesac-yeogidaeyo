@@ -6,7 +6,7 @@ import com.hyun.sesac.domain.model.ParkingSpotModel
 import kotlinx.coroutines.flow.Flow
 
 interface ParkingRepository {
-   //suspend fun getParkingSpots(placeName: String): Result<List<ParkingSpotModel>>
+    //suspend fun getParkingSpots(placeName: String): Result<List<ParkingSpotModel>>
 
     fun create(parkingInfo: Parking) : Flow<DataResourceResult<Unit>>
     fun read() : Flow<DataResourceResult<List<Parking>>>
