@@ -153,7 +153,7 @@ fun CurrentLocationScreen(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
-        // ✅ 내 위치
+        // TODO MARKER 말고 내 위치 수정
         currentLocation?.let {
             Marker(
                 state = MarkerState(LatLng(it.latitude, it.longitude)),
@@ -163,9 +163,13 @@ fun CurrentLocationScreen(
 
         parkingSpots.forEach { spot ->
             Marker(
-                state = MarkerState(LatLng(spot.lat, spot.lng)),
-                title = spot.prkNm,
+                state = MarkerState(LatLng(spot.latitude, spot.longitude)),
+                title = spot.name,
                 //snippet = spot.priceInfo
+                onClick = { marker ->
+                    parkingViewModel.onSpotSelected(spot)
+                    false
+                }
             )
         }
     }

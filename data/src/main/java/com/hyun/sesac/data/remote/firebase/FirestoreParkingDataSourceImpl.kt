@@ -6,14 +6,18 @@ import com.hyun.sesac.data.mapper.toDomainParkingLotList
 import com.hyun.sesac.data.mapper.toFirestoreParkingLotDTO
 import com.hyun.sesac.data.remote.dto.ParkingLotDTO
 import com.hyun.sesac.domain.model.Parking
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class FirestoreParkingDataSourceImpl() : ParkingDataSource {
-    private val firestore by lazy{
+class FirestoreParkingDataSourceImpl @Inject constructor(
+    private val firestore: FirebaseFirestore
+) : ParkingDataSource {
+    /*private val firestore by lazy{
         FirebaseFirestore.getInstance()
-    }
+    }*/
 
     override fun read(): Flow<List<Parking>> = callbackFlow {
         val listener = firestore.collection("seoul_parking_collection")
@@ -22,7 +26,6 @@ class FirestoreParkingDataSourceImpl() : ParkingDataSource {
                     close(e)
                     return@addSnapshotListener
                 }
-
                 try{
                     val parkingDtoList = snapshot?.toObjects(ParkingLotDTO::class.java) ?: emptyList()
                     trySend(parkingDtoList.toDomainParkingLotList())
@@ -30,6 +33,7 @@ class FirestoreParkingDataSourceImpl() : ParkingDataSource {
                     close(mappingError)
                 }
             }
+        awaitClose { listener.remove() }
     }
 
     override suspend fun delete(parkingID: String) {

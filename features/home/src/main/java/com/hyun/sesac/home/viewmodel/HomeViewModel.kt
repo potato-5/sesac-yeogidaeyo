@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getRecommendListUseCase: GetRecommendListUseCase,
-    private val getToggleFavoriteUseCase: GetToggleFavoriteUseCase
+  //  private val getRecommendListUseCase: GetRecommendListUseCase,
+  //  private val getToggleFavoriteUseCase: GetToggleFavoriteUseCase
 ) : ViewModel() {
 
     /*    val test = flow {
@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
     // TODO 12/24 button 클릭시 flow 처리
     // TODO 12/24 @hiltviewmodel 차이 -> owner에 맞춰서 viewmodel 유지 cleared 마지막 재정의
     // screen 1개 당 1개의 viewmodel이 아님 2개를 줄 수 있음
-    val uiState: StateFlow<HomeUiState> = getRecommendListUseCase()
+/*    val uiState: StateFlow<HomeUiState> = getRecommendListUseCase()
         .map{ list ->
             HomeUiState(
                 isLoading = false,
@@ -50,5 +50,5 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getToggleFavoriteUseCase(parkingId)
         }
-    }
+    }*/
 }

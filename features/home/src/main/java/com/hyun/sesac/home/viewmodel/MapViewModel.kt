@@ -3,20 +3,62 @@ package com.hyun.sesac.home.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hyun.sesac.domain.model.ParkingSpotModel
-import com.hyun.sesac.domain.usecase.map.GetParkingSpotsUseCase
+import com.hyun.sesac.domain.common.DataResourceResult
+import com.hyun.sesac.domain.model.Parking
+import com.hyun.sesac.domain.usecase.firestore.GetParkingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val getParkingSpotsUseCase: GetParkingSpotsUseCase
+    //private val getParkingSpotsUseCase: GetParkingSpotsUseCase
+    private val getParkingUseCase: GetParkingUseCase
 ): ViewModel() {
 
+    private val _parkingSpots = MutableStateFlow<List<Parking>>(emptyList())
+    val parkingSpots: StateFlow<List<Parking>> = _parkingSpots.asStateFlow()
+
+    private val _selectedSpot = MutableStateFlow<Parking?>(null)
+    val selectedSpot: StateFlow<Parking?> = _selectedSpot.asStateFlow()
+
+    init{
+        loadParkingData()
+    }
+
+    fun onSpotSelected(spot: Parking){
+        _selectedSpot.value = spot
+    }
+
+    fun loadParkingData(){
+        viewModelScope.launch {
+            getParkingUseCase().collectLatest { result ->
+                when(result){
+                    is DataResourceResult.Loading -> {
+                        Log.d("Firestore", "데이터 로딩 중...")
+                    }
+                    is DataResourceResult.Success -> {
+                        val spots = result.data
+                        Log.d("Firestore", "데이터 로드 성공! 개수: ${spots.size}")
+                        spots.forEach {
+                            Log.d("Firestore", "주차장: ${it.name}, 좌표: ${it.latitude}, ${it.longitude}")
+                        }
+                        _parkingSpots.value = spots
+                    }
+                    is DataResourceResult.Failure -> {
+                        Log.e("FireStore", "데이터 로드 실패: ${result.exception.message}")
+                    }
+
+                    DataResourceResult.DummyConstructor -> TODO()
+                }
+            }
+        }
+    }
+/*
     private val _parkingSpots = MutableStateFlow<List<ParkingSpotModel>>(emptyList())
     val parkingSpots: StateFlow<List<ParkingSpotModel>> = _parkingSpots.asStateFlow()
 
@@ -46,5 +88,5 @@ class MapViewModel @Inject constructor(
                     e.printStackTrace()
                 }
         }
-    }
+    }*/
 }

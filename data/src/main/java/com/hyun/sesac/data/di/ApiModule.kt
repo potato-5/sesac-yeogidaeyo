@@ -1,8 +1,5 @@
 package com.hyun.sesac.data.di
 
-import android.R.attr.level
-import com.hyun.sesac.data.impl.ParkingRepositoryImpl
-import com.hyun.sesac.data.remote.api.ParkingApiService
 import com.hyun.sesac.domain.repository.ParkingRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -52,7 +49,7 @@ object ApiModule {
     }
 
     // TODO ParkingApiServiceImpl(구현체), room db, dao 구현체
-    @Provides
+/*    @Provides
     @Singleton
     fun provideParkingApiService(retrofit: Retrofit): ParkingApiService{
         return retrofit.create(ParkingApiService::class.java)
@@ -62,5 +59,5 @@ object ApiModule {
     @Singleton
     fun provideParkingRepository(apiService: ParkingApiService): ParkingRepository {
         return ParkingRepositoryImpl(apiService)
-    }
+    }*/
 }

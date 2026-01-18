@@ -1,9 +1,11 @@
 package com.hyun.sesac.data.repository
 
 import com.hyun.sesac.data.datasource.ParkingDataSource
+import com.hyun.sesac.data.di.IoDispatcher
 import com.hyun.sesac.domain.common.DataResourceResult
 import com.hyun.sesac.domain.model.Parking
 import com.hyun.sesac.domain.repository.ParkingRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -11,9 +13,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
-class FirestoreParkingRepositoryImpl(
-    private val dataSource: ParkingDataSource
+class FirestoreParkingRepositoryImpl @Inject constructor(
+    private val dataSource: ParkingDataSource,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ParkingRepository {
 
     override fun read() = dataSource.read()
@@ -24,7 +28,9 @@ class FirestoreParkingRepositoryImpl(
             emit(DataResourceResult.Failure(e))
         }
         .onStart{ emit(DataResourceResult.Loading)}
-        .flowOn(Dispatchers.IO)
+        // di에다 코루틴 inject로 주입 해야 됨
+        // hiltwithmvvmpj 코드 참고
+        .flowOn(ioDispatcher)
 
     private fun wrapCUDOperation(
         operation: suspend () -> Unit
@@ -33,14 +39,14 @@ class FirestoreParkingRepositoryImpl(
         operation()
         emit(DataResourceResult.Success(Unit))
     }.catch{ e->
-        emit(DataResourceResult.Success(Unit))
-    }.flowOn(Dispatchers.IO)
+        emit(DataResourceResult.Failure(e))
+    }.flowOn(ioDispatcher)
 
-    override fun update(parkingInfo: Parking): wrapCUDOperation {
+    override fun update(parkingInfo: Parking) = wrapCUDOperation {
         dataSource.update(parkingInfo)
     }
 
-    override fun delete(parkingID: String): wrapCUDOperation {
+    override fun delete(parkingID: String) = wrapCUDOperation {
         dataSource.delete(parkingID)
     }
 

@@ -4,6 +4,7 @@ import com.hyun.sesac.domain.model.ParkingSpotModel
 import com.hyun.sesac.domain.repository.ParkingRepository
 import javax.inject.Inject
 
+/*
 class GetParkingSpotsUseCase @Inject constructor(
     private val repository: ParkingRepository
 ) {
@@ -11,6 +12,7 @@ class GetParkingSpotsUseCase @Inject constructor(
         return repository.getParkingSpots(placeName)
     }
 }
+*/
 
 /*
 class GetRecommendListUseCase(

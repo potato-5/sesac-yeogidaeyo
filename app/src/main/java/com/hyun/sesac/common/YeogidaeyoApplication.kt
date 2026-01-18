@@ -5,20 +5,25 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class YeogidaeyoApplication : Application() {
+class YeogidaeyoApplication : Application(){
+
     override fun onCreate(){
         super.onCreate()
         yeogidaeyoApp = this
         fixOrientationPortrait()
+        Log.d("Firebase", "App Name: ${com.google.firebase.FirebaseApp.getInstance().name}")
     }
     companion object{
         private lateinit var yeogidaeyoApp : YeogidaeyoApplication
         fun fetchYeogidaeyoApplication() = yeogidaeyoApp
     }
+
     // TODO FIREBASE, COIL 등 설정
+
     // 단말기 화면 세로모드 고정
     private fun fixOrientationPortrait(){
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
