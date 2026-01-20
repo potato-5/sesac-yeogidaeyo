@@ -18,6 +18,7 @@ import com.hyun.sesac.register.ui.component.PhotoSection
 import com.hyun.sesac.shared.R
 import com.hyun.sesac.shared.ui.component.CommonTitle
 import com.hyun.sesac.shared.ui.component.CommonButton
+import com.hyun.sesac.shared.ui.theme.PreviewTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +41,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(24.dp))
         CommonTitle(stringResource(id = R.string.my_parking_register_title))
 
+        // TODO ( IF EMPTY 함수 안에 작성 )
         LocationSection(
             locationName = locationFromGps.ifEmpty { stringResource(id = R.string.register_location_empty) },
             parkingSpot = parkingFromGps.ifEmpty { stringResource(id = R.string.register_spot_empty) },
@@ -54,16 +56,16 @@ fun RegisterScreen(
 
         InputSection(
             floor = floor,
-            onFloorChange = { },
             memo = memo,
+            modifier = Modifier,
             onMemoChange = { },
-            modifier = Modifier
+            onFloorChange = { },
         )
 
         CommonButton(
             modifier = Modifier.padding(vertical = 16.dp),
-            onClick = {},
-            text = stringResource(id = R.string.register_my_parking)
+            text = stringResource(id = R.string.register_my_parking),
+            onClick = {}
         )
     }
 }
@@ -72,7 +74,7 @@ fun RegisterScreen(
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    MaterialTheme {
+    PreviewTheme {
         Scaffold { innerPadding ->
             RegisterScreen(
                 paddingValues = innerPadding

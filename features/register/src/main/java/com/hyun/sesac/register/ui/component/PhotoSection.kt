@@ -21,10 +21,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hyun.sesac.shared.R
 import com.hyun.sesac.shared.ui.component.CommonWrapperCard
+import com.hyun.sesac.shared.ui.theme.HeadingTitle
+import com.hyun.sesac.shared.ui.theme.LightIndigo
+import com.hyun.sesac.shared.ui.theme.MainIndigo
+import com.hyun.sesac.shared.ui.theme.NeutralGray
+import com.hyun.sesac.shared.ui.theme.PreviewTheme
+import com.hyun.sesac.shared.ui.theme.PureWhite
+import com.hyun.sesac.shared.ui.theme.SoftIndigo
 
 @Composable
 fun PhotoSection(
@@ -41,7 +49,7 @@ fun PhotoSection(
                     .fillMaxWidth()
                     .height(300.dp)
                     .background(
-                        color = Color(0xFFF8F9FF),
+                        color = SoftIndigo,
                         shape = RoundedCornerShape(20.dp)
                     )
                     .clickable { onTakePhotoClick() },
@@ -50,14 +58,14 @@ fun PhotoSection(
             ) {
                 Surface(
                     shape = CircleShape,
-                    color = Color.White,
+                    color = PureWhite,
                     modifier = Modifier.size(80.dp),
                     shadowElevation = 2.dp
                 ) {
                     Icon(
                         imageVector = Icons.Default.PhotoCamera,
-                        contentDescription = "사진 찍기",
-                        tint = Color(0xFF6200EE),
+                        contentDescription = stringResource(id = R.string.photo_shoot),
+                        tint = MainIndigo,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -65,24 +73,42 @@ fun PhotoSection(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "여기를 눌러 내 차를 찍어주세요!",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF6200EE)
+                    text = stringResource(id = R.string.click_photo_my_car),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = LightIndigo
                 )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
-                    text = "기둥 번호가 잘 나오게 찍으면 좋아요",
+                    text = stringResource(id = R.string.register_photo_tip),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = NeutralGray
                 )
             }
         } else {
-            Box(modifier = Modifier.fillMaxWidth().height(160.dp)) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(160.dp)) {
                 Text(
-                    text = "여기에 찍은 사진이 이제 보일거야",
-                    modifier = Modifier.align(Alignment.Center)
+                    text = stringResource(id = R.string.my_parking_register_photo),
+                    modifier = Modifier.align(Alignment.Center),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = HeadingTitle
                 )
             }
         }
+    }
+}
+
+// Preview
+@Preview(showBackground = true)
+@Composable
+fun PhotoSectionPreview() {
+    PreviewTheme {
+        PhotoSection(
+            capturedImageUri = null,
+            onTakePhotoClick = {},
+        )
     }
 }

@@ -1,7 +1,6 @@
 package com.hyun.sesac.data.di
 
-import com.hyun.sesac.data.remote.firebase.FirestoreParkingDataSourceImpl
-import com.hyun.sesac.data.repository.BookmarkRepositoryImpl
+import com.hyun.sesac.data.impl.BookmarkRepositoryImpl
 import com.hyun.sesac.data.repository.FirestoreParkingRepositoryImpl
 import com.hyun.sesac.data.repository.UserRepositoryImpl
 import com.hyun.sesac.domain.repository.BookmarkRepository
@@ -9,7 +8,6 @@ import com.hyun.sesac.domain.repository.ParkingRepository
 import com.hyun.sesac.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton

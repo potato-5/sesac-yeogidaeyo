@@ -11,13 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.hyun.sesac.shared.ui.theme.LightIndigo
+import com.hyun.sesac.shared.ui.theme.PureWhite
 
+// TODO BUTTON -> SUCCESS / ERROR 컬러 설정
 @Composable
 fun CommonButton(
     modifier: Modifier = Modifier,
     text: String,
-    containerColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = Color.White,
+    containerColor: Color = LightIndigo,
+    contentColor: Color = PureWhite,
     onClick: () -> Unit,
 ) {
     Button(
@@ -33,6 +36,8 @@ fun CommonButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.titleMedium)
+            style = MaterialTheme.typography.titleLarge,
+            color = PureWhite
+        )
     }
 }

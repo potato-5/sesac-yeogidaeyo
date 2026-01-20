@@ -18,7 +18,7 @@ fun CommonIcon(
     iconPadding: Dp,
     iconColor: Color,
     modifier: Modifier = Modifier,
-    ){
+){
 
     Surface(
         color = Color.White,

@@ -32,6 +32,7 @@ class MapViewModel @Inject constructor(
     private val _parkingSpots = MutableStateFlow<List<Parking>>(emptyList())
     val parkingSpots: StateFlow<List<Parking>> = _parkingSpots.asStateFlow()
 
+    // select된 주차장 정보 id
     private val _selectedSpotID = MutableStateFlow<String?>(null)
     @OptIn(ExperimentalCoroutinesApi::class)
     val selectedSpot: StateFlow<Parking?> = _selectedSpotID
@@ -117,14 +118,15 @@ class MapViewModel @Inject constructor(
             initialValue = false
         )
 
-    fun toggleBookmark(){
-        val currentSpot = selectedSpot.value ?: return
+    fun toggleBookmark(parking: Parking?){
+        if (parking == null) return // 없으면 그냥 무시하고 종료
 
+        val currentStatus = isBookmarked.value
         viewModelScope.launch{
-            if(isBookmarked.value){
-                bookmarkRepository.removeBookmark(currentSpot)
+            if(currentStatus){
+                bookmarkRepository.removeBookmark(parking.id)
             }else{
-                bookmarkRepository.addBookmark(currentSpot)
+                bookmarkRepository.addBookmark(parking)
             }
         }
     }
@@ -135,34 +137,3 @@ class MapViewModel @Inject constructor(
         }
     }
 }
-/*
-    private val _parkingSpots = MutableStateFlow<List<ParkingSpotModel>>(emptyList())
-    val parkingSpots: StateFlow<List<ParkingSpotModel>> = _parkingSpots.asStateFlow()
-
-    init{
-        loadParkingData()
-    }
-
-    fun loadParkingData(){
-        viewModelScope.launch {
-            Log.d("API_TEST", "데이터 요청 시작...")
-            getParkingSpotsUseCase("광화문·덕수궁")
-                .onSuccess { spots ->
-                    Log.d("API_TEST", "2. API 성공! 받아온 주차장 개수: ${spots.size}")
-
-                    if (spots.isEmpty()) {
-                        Log.d("API_TEST", "3. 성공은 했는데 리스트가 비어있음. (데이터 파싱 문제 가능성)")
-                    } else {
-                        spots.forEach {
-                            Log.d("API_TEST", "4. 데이터 확인 - 이름: ${it.prkNm}, 위도: ${it.lat}, 경도: ${it.lng}")
-                        }
-                    }
-
-                    _parkingSpots.value = spots
-                }
-                .onFailure { e ->
-                    Log.e("API_TEST", "2. API 실패! 이유: ${e.message}")
-                    e.printStackTrace()
-                }
-        }
-    }*/

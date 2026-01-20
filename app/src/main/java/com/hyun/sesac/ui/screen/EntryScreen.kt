@@ -12,7 +12,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -23,6 +23,7 @@ import com.hyun.sesac.home.navigation.homeNavGraph
 import com.hyun.sesac.mypage.navigation.myPageNavGraph
 import com.hyun.sesac.register.navigation.registerNavGraph
 import com.hyun.sesac.shared.navigation.HomeNavigationRoute
+import com.hyun.sesac.shared.ui.theme.MainIndigo
 import com.hyun.sesac.ui.component.BottomAppBarItem
 import kotlin.reflect.KClass
 
@@ -69,14 +70,15 @@ fun EntryScreen() {
                             selected = isSelected,
                             label = {
                                 Text(
-                                    text = bottomItem.tabName, color = Color.Blue
+                                    text = stringResource(bottomItem.tabName),
+                                    color = MainIndigo
                                 )
                             },
                             icon = {
                                 Icon(
                                     bottomItem.icon,
-                                    contentDescription = bottomItem.tabName,
-                                    tint = Color.Blue
+                                    contentDescription = stringResource(bottomItem.tabName),
+                                    tint = MainIndigo
                                 )
                             },
                             onClick = {
@@ -99,8 +101,8 @@ fun EntryScreen() {
             //modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             homeNavGraph(navController, paddingValues)
-            myPageNavGraph(navController, paddingValues)
-            registerNavGraph(navController,paddingValues)
+            myPageNavGraph(navController,paddingValues)
+            registerNavGraph(navController, paddingValues)
         }
     }
 }

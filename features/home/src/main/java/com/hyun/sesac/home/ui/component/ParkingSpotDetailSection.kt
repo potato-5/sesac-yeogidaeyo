@@ -13,26 +13,28 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CommentsDisabled
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hyun.sesac.domain.model.Parking
+import com.hyun.sesac.shared.R
 import com.hyun.sesac.shared.ui.component.CommonIcon
-import com.hyun.sesac.shared.ui.component.CommonTitle
+import com.hyun.sesac.shared.ui.theme.CaptionText
+import com.hyun.sesac.shared.ui.theme.ErrorRed
+import com.hyun.sesac.shared.ui.theme.NeutralGray
+import com.hyun.sesac.shared.ui.theme.PreviewTheme
 
 @Composable
 fun ParkingSpotDetailSection(
     selectedSpot: Parking?,
     isBookmarked: Boolean,
-    onBookmarkClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBookmarkClick: () -> Unit
 ) {
     if (selectedSpot == null) {
         Box(
@@ -47,14 +49,14 @@ fun ParkingSpotDetailSection(
                 CommonIcon(
                     icon = Icons.Default.CommentsDisabled,
                     iconPadding = 12.dp,
-                    iconColor = Color.Gray
+                    iconColor = NeutralGray
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "정보가 없습니다.",
-                    style = MaterialTheme.typography.bodyMedium
+                    text = stringResource(id = R.string.register_location_empty),
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
@@ -80,19 +82,18 @@ fun ParkingSpotDetailSection(
                     Column {
                         Text(
                             text = selectedSpot.name,
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleLarge,
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 // TODO 위치 계산 하기
                 Text(
                     text = "0.5km · ${selectedSpot.address}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = CaptionText,
                     maxLines = 1
                 )
             }
@@ -100,7 +101,7 @@ fun ParkingSpotDetailSection(
             CommonIcon(
                 icon = if(isBookmarked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 iconPadding = 12.dp,
-                iconColor = Color.Red,
+                iconColor = ErrorRed,
                 modifier = Modifier
                     .clickable { onBookmarkClick() }
             )
@@ -108,13 +109,18 @@ fun ParkingSpotDetailSection(
     }
 }
 
-/*
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun ParkingInfoPre() {
-    MaterialTheme {
+fun ParkingDetailPreview() {
+    val dummyParking = Parking(
+        name = stringResource(id = R.string.test),
+        address = stringResource(id = R.string.test)
+    )
+    PreviewTheme {
         ParkingSpotDetailSection(
-            selectedSpot = null
+            selectedSpot = dummyParking,
+            isBookmarked = true,
+            onBookmarkClick = {  }
         )
     }
-}*/
+}

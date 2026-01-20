@@ -19,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,6 +26,7 @@ import com.hyun.sesac.home.ui.component.NavigationSection
 import com.hyun.sesac.home.ui.component.ParkingSpotDetail
 import com.hyun.sesac.home.viewmodel.CurrentLocationViewModel
 import com.hyun.sesac.home.viewmodel.MapViewModel
+import com.hyun.sesac.shared.ui.theme.PureWhite
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,6 +44,7 @@ fun HomeScreen(
             skipHiddenState = true
         )
     )
+
     // select spot
     val selectedSpot by parkingViewModel.selectedSpot.collectAsStateWithLifecycle()
     // bookmark state
@@ -73,15 +74,19 @@ fun HomeScreen(
             ParkingSpotDetail(
                 selectedSpot = selectedSpot,
                 isBookmarked = isBookmarked,
-                onBookmarkClick = parkingViewModel::toggleBookmark,
+                onBookmarkClick = {
+                    selectedSpot?.let { parking ->
+                        parkingViewModel.toggleBookmark(parking)
+                    }
+                },
                 onRouteClick = {
                     showNaviSheet = true
                 },
-                currentCount = selectedSpot?.currentCnt?: 0,
-                totalCount = selectedSpot?.totalCnt?: 0,
+                currentCount = selectedSpot?.currentCnt ?: 0,
+                totalCount = selectedSpot?.totalCnt ?: 0,
                 modifier = Modifier
             )
-            if(showNaviSheet){
+            if (showNaviSheet) {
                 NavigationSection(
                     onDismissRequest = {
                         showNaviSheet = false
@@ -95,7 +100,7 @@ fun HomeScreen(
             }
         },
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetContainerColor = Color.White,
+        sheetContainerColor = PureWhite,
     ) {
         Box(
             modifier = Modifier

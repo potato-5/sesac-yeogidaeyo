@@ -6,6 +6,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.hyun.sesac.shared.ui.theme.NeutralGray
 
 @Composable
 fun ParkingDivider() {
@@ -13,16 +14,16 @@ fun ParkingDivider() {
         modifier = Modifier
             .fillMaxWidth(),
         thickness = DividerDefaults.Thickness,
-        color = DividerDefaults.color
+        color = NeutralGray
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun ParkingDividerPreview() {
     HorizontalDivider(
         modifier = Modifier,
         thickness = DividerDefaults.Thickness,
-        color = DividerDefaults.color
+        color = NeutralGray
     )
 }

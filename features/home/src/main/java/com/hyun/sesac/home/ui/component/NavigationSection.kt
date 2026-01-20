@@ -16,9 +16,11 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hyun.sesac.domain.model.Parking
+import com.hyun.sesac.shared.R
 import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +44,7 @@ fun NavigationSection(
                 .padding(bottom = 48.dp)
         ){
             Text(
-                text = "길 안내를 실행할 앱을 선택해 주세요.",
+                text = stringResource(id = R.string.choose_navigation_app),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -51,7 +53,7 @@ fun NavigationSection(
             Spacer(modifier = Modifier.height(16.dp))
 
             NavigationItem(
-                name = "카카오내비",
+                name = stringResource(id = R.string.kakao_navi_app),
                 icon = Icons.Default.Navigation,
                 onClick = { onAppSelected("kakao") }
             )

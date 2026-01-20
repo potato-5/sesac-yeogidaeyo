@@ -25,7 +25,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Yeogidaeyo">
+        android:theme="@style/Theme.YeogidaeyoTheme">
         <service
             android:name=".data.service.CurrentLocationService"
             android:enabled="true"

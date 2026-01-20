@@ -10,23 +10,24 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hyun.sesac.register.R
 import com.hyun.sesac.shared.ui.component.CommonIcon
 import com.hyun.sesac.shared.ui.component.CommonWrapperCard
+import com.hyun.sesac.shared.ui.theme.HeadingTitle
+import com.hyun.sesac.shared.ui.theme.MainIndigo
+import com.hyun.sesac.shared.ui.theme.NeutralGray
+import com.hyun.sesac.shared.ui.theme.PreviewTheme
 
 
 @Composable
@@ -34,11 +35,11 @@ fun LocationSection(
     locationName: String,
     parkingSpot: String,
     modifier: Modifier = Modifier
-){
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-    ){
+    ) {
         CommonWrapperCard(
             modifier = Modifier.padding(top = 24.dp)
         ) {
@@ -49,7 +50,7 @@ fun LocationSection(
                 CommonIcon(
                     icon = Icons.Default.LocationOn,
                     iconPadding = 8.dp,
-                    iconColor = Color(0xFF6200EE),
+                    iconColor = MainIndigo,
                     modifier = Modifier
                 )
                 /*Surface(
@@ -73,12 +74,12 @@ fun LocationSection(
                     Text(
                         text = locationName,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = NeutralGray
                     )
                     Text(
                         text = parkingSpot,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.titleSmall,
+                        color = HeadingTitle
                     )
                 }
             }
@@ -90,6 +91,18 @@ fun LocationSection(
                 .size(120.dp)
                 .align(Alignment.TopEnd)
                 .offset(y = (-30).dp)
+        )
+    }
+}
+
+// Preview
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    PreviewTheme {
+        LocationSection(
+            locationName = stringResource(id = com.hyun.sesac.shared.R.string.example_memo),
+            parkingSpot = stringResource(id = com.hyun.sesac.shared.R.string.example_memo),
         )
     }
 }
